@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8-jre-alpine
+FROM eclipse-temurin:11-jre-alpine
 RUN apk add tini wget
 WORKDIR /app
 ENV HALO_VER v1.5.4
