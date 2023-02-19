@@ -1,4 +1,5 @@
-FROM node:18 AS build-console
+# syntax=docker/dockerfile:1
+FROM node:lts-alpine AS build-console
 ADD --keep-git-dir=true https://github.com/halo-dev/console.git#v2.2.1 /app/console
 WORKDIR /app/console
 RUN npm install -g pnpm && pnpm install && pnpm build:packages && pnpm build
