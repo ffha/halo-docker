@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1-labs
 FROM node:lts-alpine AS build-console
 ADD --keep-git-dir=true https://github.com/halo-dev/console.git#v2.2.1 /app/console
 WORKDIR /app/console
