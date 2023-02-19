@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1-labs
-FROM node:lts-alpine AS build-console
+FROM node:lts-slim AS build-console
 ADD --keep-git-dir=true https://github.com/halo-dev/console.git#v2.2.1 /app/console
 WORKDIR /app/console
 RUN npm install -g pnpm && pnpm install && pnpm build:packages && pnpm build
@@ -15,6 +15,5 @@ RUN groupadd --gid 1000 --system halo && useradd --system --uid 1000 --gid halo 
 COPY --from=build --chown=halo:halo /app/build/libs/halo-2.2.1.jar /app/halo.jar
 USER halo
 WORKDIR /app
-VOLUME ["/home/halo/.halo2"]
 EXPOSE 8090
 CMD ["java", "-jar", "halo.jar"]
