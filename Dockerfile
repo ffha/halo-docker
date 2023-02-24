@@ -11,7 +11,7 @@ COPY --from=build-console /app/console/dist /app/src/main/resources/console
 RUN sed -i 's/2.2.1-SNAPSHOT/2.2.1/g' gradle.properties && ./gradlew clean build -x check -x jar
 
 FROM eclipse-temurin:17-jre
-RUN apt-get install tini && groupadd --gid 1000 --system halo && useradd --system --uid 1000 --gid halo --shell /bin/sh --create-home halo
+RUN apt-get update && apt-get install tini && rm -rf /var/lib/apt/lists/* && groupadd --gid 1000 --system halo && useradd --system --uid 1000 --gid halo --shell /bin/sh --create-home halo
 COPY --from=build --chown=halo:halo /app/build/libs/halo-2.2.1.jar /app/halo.jar
 USER halo
 WORKDIR /app
