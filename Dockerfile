@@ -17,4 +17,4 @@ USER halo
 WORKDIR /app
 EXPOSE 8090
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["java", "-jar", "halo.jar"]
+CMD ["java", "-Xmx256m", "-Xms256m", "-jar", "halo.jar"]
