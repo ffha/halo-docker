@@ -11,7 +11,7 @@ ARG HALO_VERSION
 ADD --keep-git-dir=true https://github.com/halo-dev/halo.git#v$HALO_VERSION /app
 WORKDIR /app
 COPY --from=build-console /app/console/dist /app/src/main/resources/console
-RUN sed -i 's/$HALO_VERSION-SNAPSHOT/$HALO_VERSION/g' gradle.properties && ./gradlew clean build -x check -x jar
+RUN echo version=$HALO_VERSION > gradle.properties && ./gradlew clean build -x check -x jar
 
 FROM alpine
 ARG HALO_VERSION
