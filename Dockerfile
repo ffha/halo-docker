@@ -13,7 +13,7 @@ WORKDIR /app
 COPY --from=build-console /app/console/dist /app/src/main/resources/console
 RUN echo version=$HALO_VERSION > gradle.properties && ./gradlew clean build -x check -x jar
 
-FROM busybox:glibc
+FROM debian:stable-slim
 ARG HALO_VERSION
 ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17-jre $JAVA_HOME $JAVA_HOME
