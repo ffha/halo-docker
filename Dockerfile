@@ -13,11 +13,8 @@ WORKDIR /app
 COPY --from=build-console /app/console/dist /app/src/main/resources/console
 RUN echo version=$HALO_VERSION > gradle.properties && ./gradlew clean build -x check -x jar
 
-FROM debian:stable-slim
+FROM eclipse-temurin:17-jre-alpine
 ARG HALO_VERSION
-ENV JAVA_HOME=/opt/java/openjdk
-COPY --from=eclipse-temurin:17-jre $JAVA_HOME $JAVA_HOME
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
 ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /sbin/tini
 RUN chmod +x /sbin/tini && addgroup -S -g 1000 halo && adduser -S -D -u 1000 -h /home/halo -s /bin/sh -G halo halo
 COPY --from=build --chown=halo:halo /app/build/libs/halo-$HALO_VERSION.jar /app/halo.jar
