@@ -13,12 +13,16 @@ WORKDIR /app
 COPY --from=build-console /app/console/dist /app/src/main/resources/console
 RUN echo version=$HALO_VERSION > gradle.properties && ./gradlew clean build -x check -x jar
 
-FROM alpine
+FROM busybox:glibc
 ARG HALO_VERSION
-RUN apk add --no-cache openjdk17-jre-headless tini && addgroup -g 1000 -S halo && adduser -S -D -H -u 1000 -h /home/halo -s /bin/sh -g halo halo
+ENV JAVA_HOME=/opt/java/openjdk
+COPY --from=eclipse-temurin:17-jre $JAVA_HOME $JAVA_HOME
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /sbin/tini
+RUN chmod +x /sbin/tini && addgroup -g 1000 -S halo && adduser -S -D -H -u 1000 -h /home/halo -s /bin/sh -g halo halo
 COPY --from=build --chown=halo:halo /app/build/libs/halo-$HALO_VERSION.jar /app/halo.jar
 USER halo
 WORKDIR /app
 EXPOSE 8090
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["sh", "-c", "java -Xmx256m -Xms256m -jar halo.jar ${0} ${@}"]
+CMD ["/bin/sh", "-c", "java -Xmx256m -Xms256m -jar halo.jar ${0} ${@}"]
