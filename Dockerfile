@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1-labs
-ARG HALO_VERSION=2.3.0
+ARG HALO_VERSION=2.3.1
 FROM node:lts-slim AS build-console
 ARG HALO_VERSION
 ADD --keep-git-dir=true https://github.com/halo-dev/console.git#v$HALO_VERSION /app/console
