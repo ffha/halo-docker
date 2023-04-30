@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1-labs
-ARG HALO_VERSION=2.3.1
+ARG HALO_VERSION=2.5.1
 FROM eclipse-temurin:17 AS build
 ARG HALO_VERSION
 ADD --keep-git-dir=true https://github.com/halo-dev/halo.git#v$HALO_VERSION /app
