@@ -1,17 +1,11 @@
 # syntax=docker/dockerfile:1-labs
 ARG HALO_VERSION=2.3.1
-FROM node:lts-slim AS build-console
-ARG HALO_VERSION
-ADD --keep-git-dir=true https://github.com/halo-dev/console.git#v$HALO_VERSION /app/console
-WORKDIR /app/console
-RUN npm install -g pnpm && pnpm install && pnpm build:packages && pnpm build
-
 FROM eclipse-temurin:17 AS build
 ARG HALO_VERSION
 ADD --keep-git-dir=true https://github.com/halo-dev/halo.git#v$HALO_VERSION /app
 WORKDIR /app
-COPY --from=build-console /app/console/dist /app/src/main/resources/console
-RUN echo version=$HALO_VERSION > gradle.properties && ./gradlew clean build -x check -x jar
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y nodejs make && \
+   npm i -g pnpm && make -C console build && echo version=$HALO_VERSION > gradle.properties && ./gradlew clean build -x check -x jar
 
 FROM eclipse-temurin:17-jre-alpine
 ARG HALO_VERSION
