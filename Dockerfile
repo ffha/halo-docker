@@ -10,7 +10,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y
 FROM eclipse-temurin:17-jre-alpine
 ARG HALO_VERSION
 RUN apk add --no-cache tini tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone && apk del tzdata && addgroup -S -g 1000 halo && adduser -S -D -u 1000 -h /home/halo -s /bin/sh -G halo halo
-COPY --from=build --chown=halo:halo /app/build/libs/halo-$HALO_VERSION.jar /app/halo.jar
+COPY --from=build --chown=halo:halo /app/application/build/libs/halo-$HALO_VERSION.jar /app/halo.jar
 USER halo
 WORKDIR /app
 EXPOSE 8090
